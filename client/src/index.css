@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+@import "tailwindcss";
+
+@theme{
+    --color-primary: #F84563;
+    --color-primary-dull: #D63854;
+}
+
+* {
+    font-family: "Outfit", sans-serif;
+    scrollbar-width: thin;
+    scrollbar-color: #787777 #1e1e1e;
+    scroll-behavior: smooth;
+}
+body{
+    background-color: #09090B;
+    color: white;
+}
+
+.react-player > div > iframe {
+  object-fit: cover !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.no-scrollbar {
+    scrollbar-width: none;
+}
