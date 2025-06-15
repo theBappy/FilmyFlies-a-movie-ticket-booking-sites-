@@ -6,6 +6,7 @@ import { serve } from "inngest/express";
 import { inngest, functions } from './inngest/index.js';
 import connectDB from './config/db.js'
 import showRouter from './routes/show.routes.js';
+import bookingRouter from './routes/booking.route.js';
 
 
 const app = express()
@@ -22,6 +23,7 @@ app.get('/', (req, res) => {
 })
 app.use("/api/inngest", serve({ client: inngest, functions }));
 app.use('/api/show', showRouter)
+app.use('/api/booking', bookingRouter)
 
 // ✅ First connect to DB, then start server
 await connectDB()
