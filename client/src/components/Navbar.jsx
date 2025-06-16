@@ -2,8 +2,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { MenuIcon, SearchIcon, TicketPlus, XIcon } from "lucide-react";
 import { useState } from "react";
 import { useClerk, UserButton, useUser } from "@clerk/clerk-react";
+import { useAppContext } from "../context/AppContext";
 
 const Navbar = () => {
+  const { favoriteMovies } = useAppContext()
   const [isOpen, setIsOpen] = useState(false);
   const { user } = useUser();
   const { openSignIn } = useClerk();
@@ -56,6 +58,7 @@ const Navbar = () => {
         >
           Releases
         </Link>
+        {favoriteMovies.length > 0 && (
         <Link
           onClick={() => {
             scrollTo(0, 0); setIsOpen(false);
@@ -64,6 +67,7 @@ const Navbar = () => {
         >
           Favorite
         </Link>
+        )}
       </div>
       {/* user login and search icons */}
       <div className="flex items-center gap-8">
