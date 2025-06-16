@@ -10,13 +10,13 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const sendEmail = async ({ to, subject, booking, timeZone }) => {
-  const html = htmlBody(booking, timeZone);
+const sendEmail = async ({ to, subject, booking, timeZone, html }) => {
+  const emailHtml = html || htmlBody(booking, timeZone);
   return await transporter.sendMail({
     from: process.env.SENDER_EMAIL,
     to,
     subject,
-    html,
+    html: emailHtml,
   });
 };
 
