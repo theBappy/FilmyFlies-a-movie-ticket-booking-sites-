@@ -29,7 +29,7 @@ const htmlBody = (booking, timeZone) => {
         <li><strong>Amount:</strong> $${(booking?.amount / 100).toFixed(2)} USD</li>
       </ul>
 
-      <p><strong>⚠️ Important:</strong> Please complete the payment within <strong>15 minutes</strong>. 
+      <p><strong>⚠️ Important notice for unpaid booked:</strong> Please complete the payment within <strong>15 minutes</strong>. 
       Otherwise, your selected seats will be released and the order will be automatically deleted.</p>
 
       <p>Thank you for choosing <strong>FilmyFlies</strong>! 🍿</p>
