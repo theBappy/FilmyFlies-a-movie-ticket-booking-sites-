@@ -79,26 +79,42 @@ const releaseSeatAndDeleteBooking = inngest.createFunction(
 )
 
 // inngest function to send an email when user booked show 
+
 export const sendBookingConfirmationEmail = inngest.createFunction(
   { id: 'send-booking-confirmation-email' },
   { event: 'app/show.booked' },
-  async ({ event }) => {
+  async ({ event, step }) => {
     const { bookingId } = event.data;
 
-    const booking = await Booking.findById(bookingId)
-      .populate({
-        path: 'show',
-        populate: { path: 'movie', model: 'Movie' },
-      })
-      .populate('user');
+    // ✅ Step 1: Ensure MongoDB is connected
+    if (mongoose.connection.readyState === 0) {
+      await step.run("connect-db", async () => {
+        console.log("🔗 Connecting to MongoDB...");
+        await connectDB();
+      });
+    }
 
-    await sendEmail({
-      to: booking.user.email,
-      subject: `🎟️ Booking Reserved for "${booking.show.movie.title}"`,
-      booking, 
-      timeZone: 'Asia/Dhaka', 
+    // ✅ Step 2: Fetch booking
+    const booking = await step.run("fetch-booking", async () => {
+      return await Booking.findById(bookingId)
+        .populate({
+          path: 'show',
+          populate: { path: 'movie', model: 'Movie' },
+        })
+        .populate('user');
     });
+
+    // ✅ Step 3: Send email
+    await step.run("send-email", async () => {
+      return await sendEmail({
+        to: booking.user.email,
+        subject: `🎟️ Booking Reserved for "${booking.show.movie.title}"`,
+        booking,
+        timeZone: 'Asia/Dhaka',
+      });
+    });
+
+    return { success: true };
   }
 );
-
 export const functions = [syncUserCreation, syncUserDeletion, syncUserUpdation, releaseSeatAndDeleteBooking, sendBookingConfirmationEmail];

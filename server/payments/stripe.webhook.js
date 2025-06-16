@@ -2,7 +2,7 @@ import Stripe from "stripe";
 import Booking from "../models/booking.model.js";
 import { inngest } from "../inngest/index.js";
 
-const stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY); // ✅ Use secret key here
+const stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY); 
 
 export const stripeWebhooks = async (request, response) => {
   const signature = request.headers["stripe-signature"];
