@@ -1,6 +1,6 @@
 import Booking from "../models/booking.model.js";
 import Show from "../models/shows.model.js";
-import stripe from 'stripe'
+import Stripe from "stripe";
 
 export const checkSeatsAvailability = async (showId, selectedSeats) => {
   try {
@@ -49,7 +49,7 @@ export const createBooking = async (req, res) => {
     await showData.save();
 
     // stripe gateway initialization
-    const stripeInstance = new stripe(process.env.STRIPE_SECRET_KEY)
+    const stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY)
     // creating line items for stripe
     const line_items =[{
       price_data: {
