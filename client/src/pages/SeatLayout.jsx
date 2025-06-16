@@ -47,7 +47,6 @@ const SeatLayout = () => {
     setSelectedSeats(prev => prev.includes(seatId) ? prev.filter(seat => seat !== seatId) : [...prev, seatId])
   }
 
-  
 
   const renderSeat = (row, count = 9) => (
     <div key={row} className="flex gap-2 mt-2">
@@ -95,8 +94,8 @@ const SeatLayout = () => {
       const { data } = await axios.post(`/api/booking/create`, {showId: selectedTime.showId, selectedSeats}, {headers: {Authorization: `Bearer ${await getToken()}`}})
 
       if(data.success){
-        toast.success(data.message)
-        navigate('/my-bookings')
+        window.location.href = data.url;
+        
       }else{
         toast.error(data.message)
       }
