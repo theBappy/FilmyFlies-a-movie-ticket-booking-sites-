@@ -9,10 +9,16 @@ import showRouter from './routes/show.routes.js';
 import bookingRouter from './routes/booking.route.js';
 import adminRouter from './routes/admin.route.js';
 import userRouter from './routes/user.route.js';
+import { stripeWebhooks } from './payments/stripe.webhook.js';
 
 
 const app = express()
 const PORT = process.env.PORT || 3000
+
+// Stripe webhooks route
+app.use('/api/stripe', express.raw({
+  type: 'application/json'
+}), stripeWebhooks)
 
 // Middlewares
 app.use(express.json())
