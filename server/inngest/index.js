@@ -159,7 +159,42 @@ const sendReminders = inngest.createFunction(
       sent, failed, message: `Sent ${sent} reminder(s), ${failed} failed.`
     }
   }
-
 )
 
-export const functions = [syncUserCreation, syncUserDeletion, syncUserUpdation, releaseSeatAndDeleteBooking, sendBookingConfirmationEmail, sendReminders];
+// inngest function to send a notifications when a new show is added
+export const sendNewShowNotifications = inngest.createFunction(
+  { id: 'send-new-show-notifications' },
+  { event: 'app/show.added' },
+  async ({ event }) => {
+    const { movieTitle, movieId } = event.data;
+    const users = await User.find({});
+
+    for (const user of users) {
+      const userEmail = user.email;
+      const userName = user.name;
+      const subject = `🎬 New Show Added: ${movieTitle}`;
+      const html = `
+        <div style="font-family: Arial, sans-serif; padding: 20px;">
+          <h2>Hey ${userName},</h2>
+          <p>We've just added a brand new show to our collection:</p>
+          <h3 style="color: #f84565">"${movieTitle}"</h3>
+          <p><a href="https://yourwebsite.com/shows/${movieId}" style="color: #2196F3;">Click here to check it out</a></p>
+          <br />
+          <p>Thanks,<br />🎥 FilmyFlies Team</p>
+        </div>
+      `;
+
+      await sendEmail({
+        to: userEmail,
+        subject,
+        html, 
+      });
+    }
+
+    return {
+      message: 'Notifications sent.',
+    };
+  }
+);
+
+export const functions = [syncUserCreation, syncUserDeletion, syncUserUpdation, releaseSeatAndDeleteBooking, sendBookingConfirmationEmail, sendReminders,sendNewShowNotifications];
