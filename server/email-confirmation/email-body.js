@@ -26,13 +26,13 @@ const htmlBody = (booking, timeZone) => {
         <li><strong>Show:</strong> ${movie?.title || 'Your selected movie/show'}</li>
         <li><strong>Date:</strong> ${formattedDate}</li>
         <li><strong>Time:</strong> ${formattedTime}</li>
-        <li><strong>Amount:</strong> $${(booking?.amount / 100).toFixed(2)} USD</li>
+        <li><strong>Amount:</strong> $${(booking?.amount).toFixed(2)} USD</li>
       </ul>
 
       <p><strong>⚠️ Important notice for unpaid booked:</strong> Please complete the payment within <strong>15 minutes</strong>. 
       Otherwise, your selected seats will be released and the order will be automatically deleted.</p>
 
-      <p>Thank you for choosing <strong>FilmyFlies</strong>! 🍿</p>
+      <p>Thank you for choosing <strong style="color:#f84563;">FilmyFlies</strong>! 🍿</p>
 
       <hr />
       <p style="font-size: 12px; color: #888;">This is an automated message. Please do not reply.</p>
