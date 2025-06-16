@@ -22,7 +22,7 @@ const htmlBody = (booking, timeZone) => {
       <p>You've successfully reserved the following seats for your upcoming show:</p>
       
       <ul>
-        <li><strong>Seats:</strong> ${show?.seats?.join(', ') || 'N/A'}</li>
+        <li><strong>Seats:</strong> ${booking?.bookedSeats?.join(', ') || 'N/A'}</li>
         <li><strong>Show:</strong> ${movie?.title || 'Your selected movie/show'}</li>
         <li><strong>Date:</strong> ${formattedDate}</li>
         <li><strong>Time:</strong> ${formattedTime}</li>
