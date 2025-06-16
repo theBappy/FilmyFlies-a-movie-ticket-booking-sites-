@@ -1,5 +1,6 @@
 import Stripe from "stripe";
 import Booking from "../models/booking.model.js";
+import { inngest } from "../inngest/index.js";
 
 const stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY); // ✅ Use secret key here
 
@@ -19,14 +20,20 @@ export const stripeWebhooks = async (request, response) => {
 
   try {
     switch (event.type) {
-      case "checkout.session.completed": { // ✅ This is the correct event for Stripe Checkout
+      case "checkout.session.completed": { 
         const session = event.data.object;
         const { bookingId } = session.metadata;
 
         await Booking.findByIdAndUpdate(bookingId, {
           isPaid: true,
-          paymentLink: "", // ✅ Typo fix: was "paymentLint"
+          paymentLink: "",
         });
+
+        // send confirmation email
+       await inngest.send({
+        name: 'app/show.booked',
+        data: {bookingId}
+       })
 
         break;
       }

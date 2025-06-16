@@ -2,6 +2,9 @@ import { Inngest } from "inngest";
 import User from "../models/user.model.js";
 import Booking from "../models/booking.model.js";
 import Show from "../models/shows.model.js";
+import sendEmail from "../email-confirmation/nodemailer.js";
+
+
 
 // Create a client to send and receive events
 export const inngest = new Inngest({ id: "movie-ticket-booking" });
@@ -75,4 +78,27 @@ const releaseSeatAndDeleteBooking = inngest.createFunction(
   }
 )
 
-export const functions = [syncUserCreation, syncUserDeletion, syncUserUpdation, releaseSeatAndDeleteBooking];
+// inngest function to send an email when user booked show 
+export const sendBookingConfirmationEmail = inngest.createFunction(
+  { id: 'send-booking-confirmation-email' },
+  { event: 'app/show.booked' },
+  async ({ event }) => {
+    const { bookingId } = event.data;
+
+    const booking = await Booking.findById(bookingId)
+      .populate({
+        path: 'show',
+        populate: { path: 'movie', model: 'Movie' },
+      })
+      .populate('user');
+
+    await sendEmail({
+      to: booking.user.email,
+      subject: `🎟️ Booking Reserved for "${booking.show.movie.title}"`,
+      booking, 
+      timeZone: 'Asia/Dhaka', 
+    });
+  }
+);
+
+export const functions = [syncUserCreation, syncUserDeletion, syncUserUpdation, releaseSeatAndDeleteBooking, sendBookingConfirmationEmail];
