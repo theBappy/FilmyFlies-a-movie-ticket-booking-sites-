@@ -35,7 +35,7 @@
 
   * Booking confirmation
   * Payment status
-  * Show reminders (10 mins before show)
+  * Show reminders (8 hours before show)
   * New show alerts
 
 ### 🛠 Admin Features
